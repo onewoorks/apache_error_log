@@ -5,22 +5,24 @@ content = f.readlines()
 
 def log_extract(string_lines):
     string_array = string_lines.split(" PHP Notice:")
-    trip = string_array[0].strip()
-    info = string_array[1].strip().split(' in ')
-    cause = info[0].strip()
-    file_refer = info[1].split(',')
-    filename = file_refer[0]
-    referrer = file_refer[1]
-    clean_info = re.findall("\[(.*?)\]", trip) 
-    output = {
-        "info": {
-            "time": clean_info[0],
-            "client": clean_info[-1].replace("client ","").split(':')[0],
-            "referrer": referrer
-        },
-        "cause": cause,
-        "filename": filename
-    }
+    output = {}
+    if string_array[0] != '\n':
+        trip = string_array[0].strip()
+        info = string_array[1].strip().split(' in ')
+        cause = info[0].strip()
+        file_refer = info[1].split(',')
+        filename = file_refer[0]
+        referrer = file_refer[1]
+        clean_info = re.findall("\[(.*?)\]", trip) 
+        output = {
+            "info": {
+                "time": clean_info[0],
+                "client": clean_info[-1].replace("client ","").split(':')[0],
+                "referrer": referrer
+            },
+            "cause": cause,
+            "filename": filename
+        }
     return output
 
 clients = {}
